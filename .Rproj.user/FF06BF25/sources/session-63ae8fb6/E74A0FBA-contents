@@ -1,0 +1,44 @@
+source('smart.R')
+
+correct_params <- list2env(parameters)
+wrong_params <- list2env(parameters)
+
+correct_params$`Age in years` <- 30  # Within the valid range of 30-90
+correct_params$Male <- 1 # Boolean value (TRUE or FALSE)
+correct_params$`Current smoker` <- FALSE  # Boolean value
+correct_params$`Systolic blood pressure in mmHg` <- 120  # Within the valid range of 70-200
+correct_params$Diabetic <- FALSE  # Boolean value
+correct_params$`History of coronary artery disease` <- TRUE  # Boolean value
+correct_params$`History of cerebrovascular disease` <- FALSE  # Boolean value
+correct_params$`Abdominal aortic aneurysm` <- FALSE  # Boolean value
+correct_params$`Peripheral artery disease` <- FALSE  # Boolean value
+correct_params$`Years since first diagnosis of vascular disease` <- 10  # Within the valid range of 0-30
+correct_params$`HDL-cholesterol in mmol/L` <- 1.5  # Within the valid range of 0.6-2.5
+correct_params$`Total cholesterol in mmol/L` <- 5.0  # Within the valid range of 2.5-8.0
+correct_params$`eGFR in mL/min/1.73m²` <- 90.0  # Within the valid range of 21.60551-178.39297
+correct_params$`hs-CRP in mg/dL` <- 1.0  # Within the valid range of 0.1-15.0
+correct_params$`Antithrombotic treatment` <- TRUE  # Boolean value
+
+wrong_params$`Age in years` <- 20  # Within the valid range of 30-90
+wrong_params$Male <- TRUE # Boolean value (TRUE or FALSE)
+wrong_params$`Current smoker` <- FALSE  # Boolean value
+wrong_params$`Systolic blood pressure in mmHg` <- 302  # Within the valid range of 70-200
+wrong_params$Diabetic <- FALSE  # Boolean value
+wrong_params$`History of coronary artery disease` <- TRUE  # Boolean value
+wrong_params$`History of cerebrovascular disease` <- FALSE  # Boolean value
+wrong_params$`Abdominal aortic aneurysm` <- FALSE  # Boolean value
+wrong_params$`Peripheral artery disease` <- FALSE  # Boolean value
+wrong_params$`Years since first diagnosis of vascular disease` <- 31 # Within the valid range of 0-30
+wrong_params$`HDL-cholesterol in mmol/L` <- 0.5  # Within the valid range of 0.6-2.5
+wrong_params$`Total cholesterol in mmol/L` <- 2  # Within the valid range of 2.5-8.0
+wrong_params$`eGFR in mL/min/1.73m²` <- 90.0  # Within the valid range of 21.60551-178.39297
+wrong_params$`hs-CRP in mg/dL` <- 1.0  # Within the valid range of 0.1-15.0
+wrong_params$`Antithrombotic treatment` <- 342  # Booleanwrong
+
+
+run_smart_score_if_valid(correct_params)
+calc_smart_score(correct_params)
+
+run_smart_score_if_valid(wrong_params)
+
+

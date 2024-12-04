@@ -1,0 +1,70 @@
+library(shiny)
+
+# Source the MAGGIC score functions
+source("maggic.R")
+
+# Define the UI
+ui <- fluidPage(
+  titlePanel("MAGGIC Score Calculator"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      numericInput("ef", "Ejection fraction (%)", value = 35, min = 1, max = 95),
+      numericInput("age", "Age (years)", value = 65, min = 18, max = 110),
+      numericInput("sbp", "Systolic Blood Pressure (mmHg)", value = 120, min = 50, max = 250),
+      numericInput("bmi", "BMI (kg/m²)", value = 25, min = 10, max = 50),
+      numericInput("creatinine", "Creatinine (µmol/l)", value = 100, min = 20, max = 1400),
+      selectInput("nyha", "NYHA Class", choices = 1:4, selected = 2),
+      checkboxInput("male", "Male", value = TRUE),
+      checkboxInput("smoker", "Current Smoker", value = FALSE),
+      checkboxInput("diabetic", "Diabetic", value = TRUE),
+      checkboxInput("copd", "Diagnosis of COPD", value = FALSE),
+      checkboxInput("first_diagnosis", "First diagnosis of heart failure in the past 18 months", value = TRUE),
+      checkboxInput("no_beta_blocker", "Not on Beta Blocker", value = TRUE),
+      checkboxInput("no_acei_arb", "Not on ACEI/ARB", value = FALSE),
+      
+      actionButton("calculate", "Calculate Score")
+    ),
+    
+    mainPanel(
+      h3("MAGGIC Score:"),
+      textOutput("score_output")
+    )
+  )
+)
+
+# Define the server logic
+server <- function(input, output) {
+  
+  observeEvent(input$calculate, {
+    # Parameters for calc_maggic_score function
+    parameters <- list(
+      `Ejection fraction (%)` = as.numeric(input$ef),
+      `Age (years)` = as.numeric(input$age),
+      `Systolic blood pressure (mmHg)` = as.numeric(input$sbp),
+      `BMI (kg/m²)` = as.numeric(input$bmi),
+      `Creatinine (µmol/l)` = as.numeric(input$creatinine),
+      `NYHA Class` = as.numeric(input$nyha),
+      Male = input$male,
+      `Current smoker` = input$smoker,
+      Diabetic = input$diabetic,
+      `Diagnosis of COPD` = input$copd,
+      `First diagnosis of heart failure in the past 18 months` = input$first_diagnosis,
+      `Not on beta blocker` = input$no_beta_blocker,
+      `Not on ACEI/ARB` = input$no_acei_arb
+    )
+    
+    # Calculate score
+    score <- calc_maggic_score(parameters)
+    print(score)
+    
+    # Output score
+    output$score_output <- renderText({
+      paste("The calculated MAGGIC score is:", score)
+    })
+  })
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+

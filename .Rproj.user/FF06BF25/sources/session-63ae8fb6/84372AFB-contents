@@ -1,0 +1,68 @@
+# Define the validation functions for each parameter type
+validate_range <- function(value, min, max, param_name) {
+  if (!is.numeric(value)) {
+    return(paste(param_name, "must be numeric."))
+  } else if (value < min || value > max) {
+    return(paste(param_name, "must be between", min, "and", max, "."))
+  }
+  return(TRUE)
+}
+
+validate_bool <- function(value, param_name) {
+  if (!is.logical(value) || length(value) != 1) {
+    return(paste(param_name, "must be a single boolean (TRUE or FALSE)."))
+  }
+  return(TRUE)
+}
+
+# Define a main validation function for the parameters
+validate_parameters <- function(params) {
+  validation_results <- list(
+    `Age in years` = validate_range(params$`Age in years`, 30, 90, "Age in years"),
+    `Male` = validate_bool(params$Male, "Male"),
+    `Current smoker` = validate_bool(params$`Current smoker`, "Current smoker"),
+    `Systolic blood pressure in mmHg` = validate_range(params$`Systolic blood pressure in mmHg`, 70, 200, "Systolic blood pressure in mmHg"),
+    `Diabetic` = validate_bool(params$Diabetic, "Diabetic"),
+    `History of coronary artery disease` = validate_bool(params$`History of coronary artery disease`, "History of coronary artery disease"),
+    `History of cerebrovascular disease` = validate_bool(params$`History of cerebrovascular disease`, "History of cerebrovascular disease"),
+    `Abdominal aortic aneurysm` = validate_bool(params$`Abdominal aortic aneurysm`, "Abdominal aortic aneurysm"),
+    `Peripheral artery disease` = validate_bool(params$`Peripheral artery disease`, "Peripheral artery disease"),
+    `Years since first diagnosis of vascular disease` = validate_range(params$`Years since first diagnosis of vascular disease`, 0, 30, "Years since first diagnosis of vascular disease"),
+    `HDL-cholesterol in mmol/L` = validate_range(params$`HDL-cholesterol in mmol/L`, 0.6, 2.5, "HDL-cholesterol in mmol/L"),
+    `Total cholesterol in mmol/L` = validate_range(params$`Total cholesterol in mmol/L`, 2.5, 8.0, "Total cholesterol in mmol/L"),
+    `eGFR in mL/min/1.73m²` = validate_range(params$`eGFR in mL/min/1.73m²`, 21.60551, 178.39297, "eGFR in mL/min/1.73m²"),
+    `hs-CRP in mg/dL` = validate_range(params$`hs-CRP in mg/dL`, 0.1, 15.0, "hs-CRP in mg/dL"),
+    `Antithrombotic treatment` = validate_bool(params$`Antithrombotic treatment`, "Antithrombotic treatment")
+  )
+  
+  # Collect issues as non-TRUE results
+  issues <- Filter(function(x) x != TRUE, validation_results)
+  if (length(issues) == 0) {
+    return("All parameters are valid.")
+  } else {
+    return(issues)
+  }
+}
+
+# Example usage with intentional errors
+params <- list(
+  `Age in years` = 25,  # Invalid (below range)
+  Male = "yes",  # Invalid (should be TRUE/FALSE)
+  `Current smoker` = FALSE,
+  `Systolic blood pressure in mmHg` = 120,
+  Diabetic = FALSE,
+  `History of coronary artery disease` = TRUE,
+  `History of cerebrovascular disease` = FALSE,
+  `Abdominal aortic aneurysm` = FALSE,
+  `Peripheral artery disease` = FALSE,
+  `Years since first diagnosis of vascular disease` = 5,
+  `HDL-cholesterol in mmol/L` = 3.0,  # Invalid (above range)
+  `Total cholesterol in mmol/L` = 4.0,
+  `eGFR in mL/min/1.73m²` = 90.0,
+  `hs-CRP in mg/dL` = 1.0,
+  `Antithrombotic treatment` = TRUE
+)
+
+# Validate the parameters and print issues
+validation_results <- validate_parameters(params)
+print(validation_results)
