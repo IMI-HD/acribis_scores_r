@@ -255,7 +255,6 @@ calc_barcelona_hf_score <- function(parameters) {
   
   return(all_scores)
 }
-
 # parameters2 <- list(
 #   `Age (years)` = 40,
 #   `Female` = TRUE,

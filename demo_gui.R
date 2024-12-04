@@ -1,9 +1,12 @@
 library(shiny)
 
+# Source requirements.R to install necessary packages
+source("requirements.R")
+
 # Source the score functions
 source("maggic.R")
 source("has_bled.R")
-source("barcelona_hf_v3.R")
+source("barcelona_hf_v3.R")     
 source("abc_af_bleeding.R")
 source("abc_af_death.R")
 source("abc_af_stroke.R")
