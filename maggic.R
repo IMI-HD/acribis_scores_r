@@ -121,21 +121,21 @@ calc_maggic_score <- function(parameters) {
   return(score)
 }
 
-parameters <- list(
-  `Ejection fraction (%)` = 35,
-  `Age (years)` = 65,
-  `Systolic blood pressure (mmHg)` = 120,
-  `BMI (kg/m²)` = 25,
-  `Creatinine (µmol/l)` = 100,
-  `NYHA Class` = 2,
-  Male = TRUE,
-  `Current smoker` = FALSE,
-  Diabetic = TRUE,
-  `Diagnosis of COPD` = FALSE,
-  `First diagnosis of heart failure in the past 18 months` = TRUE,
-  `Not on beta blocker` = TRUE,
-  `Not on ACEI/ARB` = FALSE
-)
-
-calc_maggic_score(parameters)
+# parameters <- list(
+#   `Ejection fraction (%)` = 35,
+#   `Age (years)` = 65,
+#   `Systolic blood pressure (mmHg)` = 120,
+#   `BMI (kg/m²)` = 25,
+#   `Creatinine (µmol/l)` = 100,
+#   `NYHA Class` = 2,
+#   Male = TRUE,
+#   `Current smoker` = FALSE,
+#   Diabetic = TRUE,
+#   `Diagnosis of COPD` = FALSE,
+#   `First diagnosis of heart failure in the past 18 months` = TRUE,
+#   `Not on beta blocker` = TRUE,
+#   `Not on ACEI/ARB` = FALSE
+# )
+# 
+# calc_maggic_score(parameters)
 

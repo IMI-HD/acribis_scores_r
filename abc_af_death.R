@@ -94,14 +94,14 @@ calc_abc_af_death_score <- function(parameters) {
   return(list(model_a, model_b))
 }
 
-
-parameters <- list(
-  `Heart Failure` = TRUE,
-  `Age` = 72,
-  `NT-proBNP in ng/L` = 600.0,
-  `GDF-15 in ng/L` = 700.0,
-  `Troponin T in ng/L` = 10.0
-)
-
-calc_abc_af_death_score(parameters)
-
+# 
+# parameters <- list(
+#   `Heart Failure` = TRUE,
+#   `Age` = 72,
+#   `NT-proBNP in ng/L` = 600.0,
+#   `GDF-15 in ng/L` = 700.0,
+#   `Troponin T in ng/L` = 10.0
+# )
+# 
+# calc_abc_af_death_score(parameters)
+# 

@@ -17,16 +17,16 @@ calc_chads_vasc_score <- function(parameters) {
   score <- sum(sapply(names(parameters), function(param) parameters[[param]] * POINTS[[param]]))
   return (score)
 }
-
-parameters <- list(
-  `Congestive heart failure/LV dysfunction` = TRUE,
-  `Hypertension` = TRUE,
-  `Age ≥75y` = FALSE,
-  `Diabetes mellitus` = TRUE,
-  `Stroke/TIA/TE` = FALSE,
-  `Vascular diseases` = TRUE,
-  `Age 65-74y` = TRUE,
-  `Sex category` = TRUE
-)
-
-calc_chads_vasc_score(parameters)
+# 
+# parameters <- list(
+#   `Congestive heart failure/LV dysfunction` = TRUE,
+#   `Hypertension` = TRUE,
+#   `Age ≥75y` = FALSE,
+#   `Diabetes mellitus` = TRUE,
+#   `Stroke/TIA/TE` = FALSE,
+#   `Vascular diseases` = TRUE,
+#   `Age 65-74y` = TRUE,
+#   `Sex category` = TRUE
+# )
+# 
+# calc_chads_vasc_score(parameters)

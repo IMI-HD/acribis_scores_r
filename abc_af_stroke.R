@@ -42,14 +42,14 @@ calc_abc_af_stroke_score <- function(parameters) {
   one_year_risk <- (1 - (baseline_survival ^ exp(linear_predictor)))
   return (one_year_risk * 100)
 }
-
-parameters <- list(
-  `Prior Stroke/TIA` = TRUE,
-  `Age` = 70,
-  `Troponin T in ng/L` = 15.0,
-  `NT-proBNP in ng/L` = 1000,
-  `DOAC` = TRUE,
-  `Aspirin` = FALSE
-)
-
-calc_abc_af_stroke_score(parameters)
+# 
+# parameters <- list(
+#   `Prior Stroke/TIA` = TRUE,
+#   `Age` = 70,
+#   `Troponin T in ng/L` = 15.0,
+#   `NT-proBNP in ng/L` = 1000,
+#   `DOAC` = TRUE,
+#   `Aspirin` = FALSE
+# )
+# 
+# calc_abc_af_stroke_score(parameters)

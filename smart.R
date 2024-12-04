@@ -119,23 +119,23 @@ run_smart_score_if_valid <- function(params) {
     print(validation_results)
   }
 }
-
-parameters <- list(
-  `Age in years` = 40,
-  `Male` = FALSE,
-  `Current smoker` = FALSE,
-  `Systolic blood pressure in mmHg` = 110,
-  `Diabetic` = FALSE,
-  `History of coronary artery disease` = FALSE,
-  `History of cerebrovascular disease` = FALSE,
-  `Abdominal aortic aneurysm` = FALSE,
-  `Peripheral artery disease` = FALSE,
-  `Years since first diagnosis of vascular disease` = 8,
-  `HDL-cholesterol in mmol/L` = 1,
-  `Total cholesterol in mmol/L` = 3,
-  `eGFR in mL/min/1.73m²` = 177,
-  `hs-CRP in mg/dL` = 6,
-  `Antithrombotic treatment` = FALSE
-)
-
-run_smart_score_if_valid(parameters)
+# 
+# parameters <- list(
+#   `Age in years` = 40,
+#   `Male` = FALSE,
+#   `Current smoker` = FALSE,
+#   `Systolic blood pressure in mmHg` = 110,
+#   `Diabetic` = FALSE,
+#   `History of coronary artery disease` = FALSE,
+#   `History of cerebrovascular disease` = FALSE,
+#   `Abdominal aortic aneurysm` = FALSE,
+#   `Peripheral artery disease` = FALSE,
+#   `Years since first diagnosis of vascular disease` = 8,
+#   `HDL-cholesterol in mmol/L` = 1,
+#   `Total cholesterol in mmol/L` = 3,
+#   `eGFR in mL/min/1.73m²` = 177,
+#   `hs-CRP in mg/dL` = 6,
+#   `Antithrombotic treatment` = FALSE
+# )
+# 
+# run_smart_score_if_valid(parameters)

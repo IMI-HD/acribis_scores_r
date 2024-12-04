@@ -1,5 +1,6 @@
 library(dplyr)
 library(purrr)
+library(tibble)
 library(readr)
 
 Model <- list(
@@ -255,57 +256,30 @@ calc_barcelona_hf_score <- function(parameters) {
   return(all_scores)
 }
 
-# Example usage
-parameters <- list(
-  `Age (years)` = 40,
-  `Female` = TRUE,
-  `NYHA Class` = 11,
-  `Ejection fraction (%)` = 13,
-  `Sodium (mmol/L)` = 10,
-  `eGFR in mL/min/1.73m²` = 6,
-  `Hemoglobin (g/dL)` = 12,
-  `Loop Diuretic Furosemide Dose` = 20,
-  `Statin` = TRUE,
-  `ACEi/ARB` = FALSE,
-  `Betablocker` = FALSE,
-  `HF Duration in months` = 1,
-  `Diabetis Mellitus` = FALSE,
-  `Hospitalisation Prev. Year` = 0,
-  `MRA` = FALSE,
-  `ICD` = FALSE,
-  `CRT` = FALSE,
-  `ARNI` = FALSE,
-  `NT-proBNP in pg/mL` = 100,
-  `hs-cTnT in ng/L` = 1.112,
-  `ST2 (ng/mL)` = 4,
-  `SGLT2i` = FALSE
-)
-
-parameters2 <- list(
-  `Age (years)` = 40,
-  `Female` = TRUE,
-  `NYHA Class` = 1,
-  `Ejection fraction (%)` = 11,
-  `Sodium (mmol/L)` = 130,
-  `eGFR in mL/min/1.73m²` = 7,
-  `Hemoglobin (g/dL)` = 9,
-  `Loop Diuretic Furosemide Dose` = 20,
-  `Statin` = TRUE,
-  `ACEi/ARB` = TRUE,
-  `Betablocker` = FALSE,
-  `HF Duration in months` = 20,
-  `Diabetes Mellitus` = TRUE,
-  `Hospitalisation Prev. Year` = 0,
-  `MRA` = FALSE,
-  `ICD` = FALSE,
-  `CRT` = FALSE,
-  `ARNI` = FALSE,
-  `NT-proBNP in pg/mL` = 1,
-  `hs-cTnT in ng/L` = 1,
-  `ST2 (ng/mL)` = 1,
-  `SGLT2i` = FALSE
-)
-
-example_scores <- calc_barcelona_hf_score(parameters2)
-print(example_scores)
-
+# parameters2 <- list(
+#   `Age (years)` = 40,
+#   `Female` = TRUE,
+#   `NYHA Class` = 11,
+#   `Sodium (mmol/L)` = 10,
+#   `eGFR in mL/min/1.73m²` = 6,
+#   `Hemoglobin (g/dL)` = 12,
+#   `Loop Diuretic Furosemide Dose` = 20,
+#   `Statin` = TRUE,
+#   `ACEi/ARB` = FALSE,
+#   `Betablocker` = FALSE,
+#   `HF Duration in months` = 1,
+#   `Diabetis Mellitus` = FALSE,
+#   `Hospitalisation Prev. Year` = 0,
+#   `MRA` = FALSE,
+#   `ICD` = FALSE,
+#   `CRT` = FALSE,
+#   `ARNI` = FALSE,
+#   `NT-proBNP in pg/mL` = 100,
+#   `hs-cTnT in ng/L` = 1.112,
+#   `ST2 (ng/mL)` = 4,
+#   `SGLT2i` = FALSE
+# )
+# 
+# example_scores <- calc_barcelona_hf_score(parameters2)
+# print(example_scores)
+# 

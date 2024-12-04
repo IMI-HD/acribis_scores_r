@@ -51,16 +51,15 @@ calc_abc_af_bleeding_score <- function(parameters) {
   return (one_year_risk * 100)
 }
 
-# Example usage
-parameters <- list(
-  `Prior Bleeding` = TRUE,
-  `Age` = 65,
-  `Troponin T in ng/L` = 10.0,
-  `GDF-15 in ng/L` = 500.0,
-  `Hemoglobin in g/dL` = 13.5,
-  `DOAC` = TRUE,
-  `Aspirin` = FALSE
-)
-
-calc_abc_af_bleeding_score(parameters)
-
+# parameters <- list(
+#   `Prior Bleeding` = TRUE,
+#   `Age` = 65,
+#   `Troponin T in ng/L` = 10.0,
+#   `GDF-15 in ng/L` = 500.0,
+#   `Hemoglobin in g/dL` = 13.5,
+#   `DOAC` = TRUE,
+#   `Aspirin` = FALSE
+# )
+# 
+# calc_abc_af_bleeding_score(parameters)
+# 
