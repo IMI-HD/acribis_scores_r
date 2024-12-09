@@ -123,6 +123,6 @@ cd acribis_scores_r
 source("requirements.R")
 
 # Run the Shiny app
-shiny::runApp("app/app.R")
+shiny::runApp("app/demo_gui.R")
 ```
 
