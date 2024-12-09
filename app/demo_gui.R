@@ -1,18 +1,18 @@
 library(shiny)
 
 # Source requirements.R to install necessary packages
-source("requirements.R")
+source("../requirements.R")
 
 # Source the score functions
-source("maggic.R")
-source("has_bled.R")
-source("barcelona_hf_v3.R")     
-source("abc_af_bleeding.R")
-source("abc_af_death.R")
-source("abc_af_stroke.R")
-source("charge_af.R")
-source("chads_vasc.R")
-source("smart.R")
+source("../scores/has_bled.R")
+source("../scores/maggic.R")
+source("../scores/barcelona_hf_v3.R")     
+source("../scores/abc_af_bleeding.R")
+source("../scores/abc_af_death.R")
+source("../scores/abc_af_stroke.R")
+source("../scores/charge_af.R")
+source("../scores/chads_vasc.R")
+source("../scores/smart.R")
 
 # Define the UI
 ui <- fluidPage(
