@@ -12,7 +12,7 @@ check_ranges <- function(parameters) {
   }
 }
 
-weights <- list(
+abc_af_stroke_weights <- list(
   `Prior Stroke/TIA` = 0.8331,
   `Age` = 0.007488,
   `log(Troponin T in ng/L)` = 0.2139,
@@ -30,7 +30,7 @@ calc_abc_af_stroke_score <- function(parameters) {
   new_parameters$`log(Troponin T in ng/L)` <- log(parameters$`Troponin T in ng/L`)
   new_parameters$`log(NT-proBNP in ng/L)` <- log(parameters$`NT-proBNP in ng/L`)
   
-  linear_predictor <- sum(unlist(new_parameters[names(weights)]) * unlist(weights)) - 3.286
+  linear_predictor <- sum(unlist(new_parameters[names(abc_af_stroke_weights)]) * unlist(abc_af_stroke_weights)) - 3.286
   
   baseline_survival <- 0.9863
   
