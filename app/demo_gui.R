@@ -340,7 +340,11 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    score <- calc_abc_af_bleeding_score(parameters)
+    score <- tryCatch({
+      calc_abc_af_bleeding_score(parameters)
+    }, error = function(e) {
+      paste("Error:", e$message)
+    })
     
     # Output score
     output$score_output_abc_af_bleeding <- renderText({
@@ -413,13 +417,12 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    # score <- tryCatch({
-    #   calc_charge_af_score(parameters)
-    # }, error = function(e) {
-    #   paste("Error:", e$message)
-    # })
-    score <- calc_charge_af_score(parameters)
-    
+    score <- tryCatch({
+      calc_charge_af_score(parameters)
+    }, error = function(e) {
+      paste("Error:", e$message)
+    })
+
     # Output score
     output$score_output_charge_af <- renderText({
       if (is.numeric(score)) {

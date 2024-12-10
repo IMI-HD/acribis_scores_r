@@ -18,7 +18,7 @@ check_ranges <- function(parameters) {
 }
 
 # Define weights
-weights <- list(
+abc_af_bleeding_weights <- list(
   `Prior Bleeding` = 0.2611,
   `Age` = 0.02168,
   `log(Troponin T in ng/L)` = 0.4095,
@@ -38,7 +38,7 @@ calc_abc_af_bleeding_score <- function(parameters) {
   new_parameters$`log(Troponin T in ng/L)` <- log(parameters$`Troponin T in ng/L`)
   new_parameters$`log(GDF-15 in ng/L)` <- log(parameters$`GDF-15 in ng/L`)
   
-  linear_predictor <- sum(unlist(new_parameters[names(weights)]) * unlist(weights)) - 4.667
+  linear_predictor <- sum(unlist(new_parameters[names(abc_af_bleeding_weights)]) * unlist(abc_af_bleeding_weights)) - 4.667
   
   baseline_survival <- 0.9766
   
