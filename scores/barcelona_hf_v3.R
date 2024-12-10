@@ -155,8 +155,8 @@ get_scores <- function(file, model, new_parameters) {
 }
 
 calc_life_expectancy <- function(model, new_parameters) {
-  coefficients_life_expectancy <- 'resources/barcelona_hf_v3_life_expectancy_coefficients.csv'
-  life_expectancy_limits <- 'resources/life_expectancy_limits.csv'
+  coefficients_life_expectancy <- '../resources/barcelona_hf_v3_life_expectancy_coefficients.csv'
+  life_expectancy_limits <- '../resources/life_expectancy_limits.csv'
   if (!file.exists(coefficients_life_expectancy) || !file.exists(life_expectancy_limits)) {
     stop("Error: Life expectancy coefficient files do not exist in the resources folder.")
   }
@@ -209,9 +209,9 @@ round_life_expectancy <- function(model, parameters) {
 
 calc_barcelona_hf_score <- function(parameters) {
   all_scores <- list()
-  coefficients_death_file <- 'resources/barcelona_hf_v3_death_coefficients.csv'
-  coefficients_hosp_file <- 'resources/barcelona_hf_v3_hosp_coefficients.csv'
-  coefficients_hosp_death_file <- 'resources/barcelona_hf_v3_hosp_death_coefficients.csv'
+  coefficients_death_file <- '../resources/barcelona_hf_v3_death_coefficients.csv'
+  coefficients_hosp_file <- '../resources/barcelona_hf_v3_hosp_coefficients.csv'
+  coefficients_hosp_death_file <- '../resources/barcelona_hf_v3_hosp_death_coefficients.csv'
   model <- get_model(parameters)
   
   for (param in MIN_MAX_MEDIAN$variable) {

@@ -6,7 +6,7 @@ check_ranges <- function(parameters) {
   }
 }
 
-weights <- list(
+charge_af_weights <- list(
   `Age` = 0.508,
   `Race (white)` = 0.465,
   `Height` = 0.248,
@@ -38,24 +38,24 @@ calc_charge_af_score <- function(parameters) {
   # Check the ranges
   check_ranges(parameters)
 
-  x <- sum(sapply(names(parameters), function(param) (parameters[[param]] / scales[[param]]) * weights[[param]]))
+  x <- sum(sapply(names(parameters), function(param) (parameters[[param]] / scales[[param]]) * charge_af_weights[[param]]))
   one_year_risk <- (1 - (0.9718412736 ^ exp(x + -12.58156))) * 100
   return (one_year_risk)
 }
-# 
-# parameters <- list(
-#   `Age` = 60,
-#   `Race (white)` = TRUE,
-#   `Height` = 170,
-#   `Weight` = 70,
-#   `Systolic Blood Pressure` = 120,
-#   `Diastolic Blood Pressure` = 80,
-#   `Smoking (current)` = FALSE,
-#   `Antihypertensive Medication Use (Yes)` = TRUE,
-#   `Diabetes (Yes)` = FALSE,
-#   `Heart failure (Yes)` = FALSE,
-#   `Myocardial infarction (Yes)` = TRUE
-# )
-# 
-# 
-# calc_charge_af_score(parameters)
+
+parameters <- list(
+  `Age` = 60,
+  `Race (white)` = TRUE,
+  `Height` = 170,
+  `Weight` = 70,
+  `Systolic Blood Pressure` = 120,
+  `Diastolic Blood Pressure` = 80,
+  `Smoking (current)` = FALSE,
+  `Antihypertensive Medication Use (Yes)` = TRUE,
+  `Diabetes (Yes)` = FALSE,
+  `Heart failure (Yes)` = FALSE,
+  `Myocardial infarction (Yes)` = TRUE
+)
+
+print(calc_charge_af_score(parameters))
+
