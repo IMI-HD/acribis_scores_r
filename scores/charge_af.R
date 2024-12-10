@@ -42,20 +42,20 @@ calc_charge_af_score <- function(parameters) {
   one_year_risk <- (1 - (0.9718412736 ^ exp(x + -12.58156))) * 100
   return (one_year_risk)
 }
-
-parameters <- list(
-  `Age` = 60,
-  `Race (white)` = TRUE,
-  `Height` = 170,
-  `Weight` = 70,
-  `Systolic Blood Pressure` = 120,
-  `Diastolic Blood Pressure` = 80,
-  `Smoking (current)` = FALSE,
-  `Antihypertensive Medication Use (Yes)` = TRUE,
-  `Diabetes (Yes)` = FALSE,
-  `Heart failure (Yes)` = FALSE,
-  `Myocardial infarction (Yes)` = TRUE
-)
-
-print(calc_charge_af_score(parameters))
-
+# 
+# parameters <- list(
+#   `Age` = 60,
+#   `Race (white)` = TRUE,
+#   `Height` = 170,
+#   `Weight` = 70,
+#   `Systolic Blood Pressure` = 120,
+#   `Diastolic Blood Pressure` = 80,
+#   `Smoking (current)` = FALSE,
+#   `Antihypertensive Medication Use (Yes)` = TRUE,
+#   `Diabetes (Yes)` = FALSE,
+#   `Heart failure (Yes)` = FALSE,
+#   `Myocardial infarction (Yes)` = TRUE
+# )
+# 
+# print(calc_charge_af_score(parameters))
+# 
