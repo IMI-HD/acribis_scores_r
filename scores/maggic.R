@@ -1,6 +1,6 @@
 library(dplyr)
 
-check_ranges <- function(parameters) {
+maggic_check_ranges <- function(parameters) {
   if (parameters$`Ejection fraction (%)` < 1 || parameters$`Ejection fraction (%)` > 95) {
     stop("'Ejection fraction (%)' must be between 1 and 95")
   }
@@ -101,7 +101,7 @@ get_nyha_class_score <- function(nyha_class) {
 # Calculation function
 calc_maggic_score <- function(parameters) {
   # Check the ranges
-  check_ranges(parameters)
+  maggic_check_ranges(parameters)
   
   # Calculate score
   score <- get_ef_score(parameters$`Ejection fraction (%)`) +

@@ -1,6 +1,6 @@
 library(dplyr)
 
-check_ranges <- function(parameters) {
+charge_af_check_ranges <- function(parameters) {
   if (parameters$`Age` < 46 || parameters$`Age` > 94) {
     stop("'Age' must be between 46 and 94")
   }
@@ -36,7 +36,7 @@ scales <- list(
 
 calc_charge_af_score <- function(parameters) {
   # Check the ranges
-  check_ranges(parameters)
+  charge_af_check_ranges(parameters)
 
   x <- sum(sapply(names(parameters), function(param) (parameters[[param]] / scales[[param]]) * charge_af_weights[[param]]))
   one_year_risk <- (1 - (0.9718412736 ^ exp(x + -12.58156))) * 100

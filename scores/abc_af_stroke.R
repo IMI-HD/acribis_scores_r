@@ -1,6 +1,6 @@
 library(dplyr)
 
-check_ranges <- function(parameters) {
+abc_af_stroke_check_ranges <- function(parameters) {
   if (parameters$`Age` < 22 || parameters$`Age` > 95) {
     stop("'Age' must be between 22 and 95")
   }
@@ -9,6 +9,12 @@ check_ranges <- function(parameters) {
   }
   if (parameters$`NT-proBNP in ng/L` < 5 || parameters$`NT-proBNP in ng/L` > 21000) {
     stop("'NT-proBNP in ng/L' must be between 5 and 21000")
+  }
+  if (!(parameters$`DOAC` || parameters$`Aspirin`)) {
+    stop("Either 'DOAC' or 'Aspirin' must be true!")
+  }
+  if ((parameters$`DOAC` && parameters$`Aspirin`)) {
+    stop("'DOAC' and 'Aspirin' cannot both be true!")
   }
 }
 
@@ -20,11 +26,7 @@ abc_af_stroke_weights <- list(
 )
 
 calc_abc_af_stroke_score <- function(parameters) {
-  check_ranges(parameters)
-  
-  if (!(parameters$DOAC || parameters$Aspirin)) {
-    stop("Either 'DOAC' or 'Aspirin' must be true!")
-  }
+  abc_af_stroke_check_ranges(parameters)
   
   new_parameters <- parameters
   new_parameters$`log(Troponin T in ng/L)` <- log(parameters$`Troponin T in ng/L`)

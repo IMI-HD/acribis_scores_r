@@ -260,11 +260,19 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    score <- calc_maggic_score(parameters)
+    score <- tryCatch({
+      calc_maggic_score(parameters)
+    }, error = function(e) {
+      paste("Error:", e$message)
+    })
     
     # Output score
     output$score_output_maggic <- renderText({
-      paste("The calculated MAGGIC score is:", score)
+      if (is.numeric(score)) {
+        paste("The calculated MAGGIC score is:", round(score, 2))
+      } else {
+        score
+      }
     })
   })
   
@@ -283,7 +291,11 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    score <- calc_has_bled_score(parameters)
+    score <- tryCatch({
+      calc_has_bled_score(parameters)
+    }, error = function(e) {
+      paste("Error:", e$message)
+    })
     
     # Output score
     output$score_output_has_bled <- renderText({
@@ -319,7 +331,11 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    score <- calc_barcelona_hf_score(parameters)
+    score <- tryCatch({
+      calc_barcelona_hf_score(parameters)
+    }, error = function(e) {
+      paste("Error:", e$message)
+    })
     
     # Output score
     output$score_output_barcelona <- renderText({
@@ -340,7 +356,7 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    score <- tryCatch({
+    abc_af_bleeding_score <- tryCatch({
       calc_abc_af_bleeding_score(parameters)
     }, error = function(e) {
       paste("Error:", e$message)
@@ -348,7 +364,11 @@ server <- function(input, output) {
     
     # Output score
     output$score_output_abc_af_bleeding <- renderText({
-      paste("The calculated ABC-AF Bleeding score is:", round(score, 2))
+      if (is.numeric(abc_af_bleeding_score)) {
+        paste("The calculated ABC-AF Bleeding score is:", round(abc_af_bleeding_score, 2))
+    } else {
+      abc_af_bleeding_score
+    }
     })
   })
   observeEvent(input$calculate_abc_af_death, {
@@ -362,7 +382,11 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    scores <- calc_abc_af_death_score(parameters)
+    score <- tryCatch({
+      calc_abc_af_death_score(parameters)
+    }, error = function(e) {
+      paste("Error:", e$message)
+    })
     
     # Output scores for Model A and Model B
     output$score_output_abc_af_death_a <- renderText({

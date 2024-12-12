@@ -2,7 +2,7 @@
 library(dplyr)
 
 # Define parameters validation function
-check_ranges <- function(parameters) {
+abc_af_bleeding_check_ranges <- function(parameters) {
   if (parameters$`Age` < 22 || parameters$`Age` > 95) {
     stop("'Age' must be between 22 and 95")
   }
@@ -14,6 +14,12 @@ check_ranges <- function(parameters) {
   }
   if (parameters$`Hemoglobin in g/dL` < 9.0 || parameters$`Hemoglobin in g/dL` > 20.0) {
     stop("'Hemoglobin in g/dL' must be between 9.0 and 20.0")
+  }
+  if (!(parameters$`DOAC` || parameters$`Aspirin`)) {
+    stop("Either 'DOAC' or 'Aspirin' must be true!")
+  }
+  if ((parameters$`DOAC` && parameters$`Aspirin`)) {
+    stop("'DOAC' and 'Aspirin' cannot both be true!")
   }
 }
 
@@ -28,11 +34,7 @@ abc_af_bleeding_weights <- list(
 
 calc_abc_af_bleeding_score <- function(parameters) {
   # Check the ranges
-  check_ranges(parameters)
-  
-  if (!(parameters$DOAC || parameters$Aspirin)) {
-    stop("Either 'DOAC' or 'Aspirin' must be true!")
-  }
+  abc_af_bleeding_check_ranges(parameters)
   
   new_parameters <- parameters
   new_parameters$`log(Troponin T in ng/L)` <- log(parameters$`Troponin T in ng/L`)
