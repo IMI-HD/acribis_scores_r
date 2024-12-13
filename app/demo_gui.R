@@ -16,7 +16,7 @@ source("../scores/smart.R")
 
 # Define the UI
 ui <- fluidPage(
-  titlePanel("Heart Failure Risk Score Calculator"),
+  titlePanel("Cardiovascular Disease Risk Score Calculator"),
   
   tabsetPanel(
     tabPanel("MAGGIC Score",
@@ -382,7 +382,7 @@ server <- function(input, output) {
     )
     
     # Calculate score
-    score <- tryCatch({
+    scores <- tryCatch({
       calc_abc_af_death_score(parameters)
     }, error = function(e) {
       paste("Error:", e$message)
