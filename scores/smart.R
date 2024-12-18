@@ -19,23 +19,23 @@ weights <- list(
   `log(hs-CRP in mg/dL)` = 0.139
 )
 
-parameters <- list(
-  `Age in years` = as.integer(NA),
-  `Male` = as.logical(NA),
-  `Current smoker` = as.logical(NA),
-  `Systolic blood pressure in mmHg` = as.integer(NA),
-  `Diabetic` = as.logical(NA),
-  `History of coronary artery disease` = as.logical(NA),
-  `History of cerebrovascular disease` = as.logical(NA),
-  `Abdominal aortic aneurysm` = as.logical(NA),
-  `Peripheral artery disease` = as.logical(NA),
-  `Years since first diagnosis of vascular disease` = as.integer(NA),
-  `HDL-cholesterol in mmol/L` = as.numeric(NA),
-  `Total cholesterol in mmol/L` = as.numeric(NA),
-  `eGFR in mL/min/1.73m²` = as.numeric(NA),
-  `hs-CRP in mg/dL` = as.numeric(NA),
-  `Antithrombotic treatment` = as.logical(NA)
-)
+# parameters <- list(
+#   `Age in years` = as.integer(NA),
+#   `Male` = as.logical(NA),
+#   `Current smoker` = as.logical(NA),
+#   `Systolic blood pressure in mmHg` = as.integer(NA),
+#   `Diabetic` = as.logical(NA),
+#   `History of coronary artery disease` = as.logical(NA),
+#   `History of cerebrovascular disease` = as.logical(NA),
+#   `Abdominal aortic aneurysm` = as.logical(NA),
+#   `Peripheral artery disease` = as.logical(NA),
+#   `Years since first diagnosis of vascular disease` = as.integer(NA),
+#   `HDL-cholesterol in mmol/L` = as.numeric(NA),
+#   `Total cholesterol in mmol/L` = as.numeric(NA),
+#   `eGFR in mL/min/1.73m²` = as.numeric(NA),
+#   `hs-CRP in mg/dL` = as.numeric(NA),
+#   `Antithrombotic treatment` = as.logical(NA)
+# )
 
 # Define the validation functions for each parameter type
 validate_range <- function(value, min, max, param_name) {

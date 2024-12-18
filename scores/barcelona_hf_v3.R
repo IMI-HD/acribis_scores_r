@@ -3,6 +3,9 @@ library(purrr)
 library(tibble)
 library(readr)
 
+setwd("C:/imi-gitlab/acribis/acribis_scores_r/scores")
+
+
 Model <- list(
   MODEL_1 = "MODEL_1",
   MODEL_2 = "MODEL_2",
@@ -40,26 +43,26 @@ check_values <- function(parameter_value, parameter_name, min_max_median) {
 }
 
 get_model <- function(parameters) {
-  if (!is.null(parameters$`NT-proBNP in pg/mL`) &&
-      is.null(parameters$`hs-cTnT in ng/L`) && is.null(parameters$`ST2 (ng/mL)`)) {
+  if (!is.na(parameters$`NT-proBNP in pg/mL`) &&
+      is.na(parameters$`hs-cTnT in ng/L`) && is.na(parameters$`ST2 (ng/mL)`)) {
     return(Model$MODEL_2)
-  } else if (!is.null(parameters$`hs-cTnT in ng/L`) &&
-             is.null(parameters$`NT-proBNP in pg/mL`) && is.null(parameters$`ST2 (ng/mL)`)) {
+  } else if (!is.na(parameters$`hs-cTnT in ng/L`) &&
+             is.na(parameters$`NT-proBNP in pg/mL`) && is.na(parameters$`ST2 (ng/mL)`)) {
     return(Model$MODEL_3)
-  } else if (!is.null(parameters$`ST2 (ng/mL)`) &&
-             is.null(parameters$`NT-proBNP in pg/mL`) && is.null(parameters$`hs-cTnT in ng/L`)) {
+  } else if (!is.na(parameters$`ST2 (ng/mL)`) &&
+             is.na(parameters$`NT-proBNP in pg/mL`) && is.na(parameters$`hs-cTnT in ng/L`)) {
     return(Model$MODEL_4)
-  } else if (!is.null(parameters$`NT-proBNP in pg/mL`) && !is.null(parameters$`ST2 (ng/mL)`) &&
-             is.null(parameters$`hs-cTnT in ng/L`)) {
+  } else if (!is.na(parameters$`NT-proBNP in pg/mL`) && !is.na(parameters$`ST2 (ng/mL)`) &&
+             is.na(parameters$`hs-cTnT in ng/L`)) {
     return(Model$MODEL_5)
-  } else if (!is.null(parameters$`NT-proBNP in pg/mL`) && !is.null(parameters$`hs-cTnT in ng/L`) &&
-             is.null(parameters$`ST2 (ng/mL)`)) {
+  } else if (!is.na(parameters$`NT-proBNP in pg/mL`) && !is.na(parameters$`hs-cTnT in ng/L`) &&
+             is.na(parameters$`ST2 (ng/mL)`)) {
     return(Model$MODEL_6)
-  } else if (!is.null(parameters$`hs-cTnT in ng/L`) && !is.null(parameters$`ST2 (ng/mL)`) &&
-             is.null(parameters$`NT-proBNP in pg/mL`)) {
+  } else if (!is.na(parameters$`hs-cTnT in ng/L`) && !is.na(parameters$`ST2 (ng/mL)`) &&
+             is.na(parameters$`NT-proBNP in pg/mL`)) {
     return(Model$MODEL_7)
-  } else if (!is.null(parameters$`NT-proBNP in pg/mL`) && !is.null(parameters$`hs-cTnT in ng/L`) &&
-             !is.null(parameters$`ST2 (ng/mL)`)) {
+  } else if (!is.na(parameters$`NT-proBNP in pg/mL`) && !is.na(parameters$`hs-cTnT in ng/L`) &&
+             !is.na(parameters$`ST2 (ng/mL)`)) {
     return(Model$MODEL_8)
   } else {
     return(Model$MODEL_1)
@@ -103,14 +106,14 @@ get_new_parameters <- function(parameters) {
   new_parameters$`Furosemide Dose 1` <- ifelse(parameters$`Loop Diuretic Furosemide Dose` > 0 & parameters$`Loop Diuretic Furosemide Dose` <= 40, 1, 0)
   new_parameters$`Furosemide Dose 2` <- ifelse(parameters$`Loop Diuretic Furosemide Dose` > 40 & parameters$`Loop Diuretic Furosemide Dose` <= 80, 1, 0)
   new_parameters$`Furosemide Dose 3` <- ifelse(parameters$`Loop Diuretic Furosemide Dose` > 80, 1, 0)
-  if (!is.null(parameters$`NT-proBNP in pg/mL`)) {
+  if (!is.na(parameters$`NT-proBNP in pg/mL`)) {
     new_parameters$`log(NT-proBNP in pg/mL)` <- ifelse(parameters$`NT-proBNP in pg/mL` == 0, 0, log(parameters$`NT-proBNP in pg/mL`))
   }
-  if (!is.null(parameters$`hs-cTnT in ng/L`)) {
+  if (!is.na(parameters$`hs-cTnT in ng/L`)) {
     new_parameters$`log(hs-cTnT in ng/L)` <- ifelse(parameters$`hs-cTnT in ng/L` == 0, 0, log(parameters$`hs-cTnT in ng/L`))
     new_parameters$`Squared log(hs-cTnT in ng/L)` <- (new_parameters$`log(hs-cTnT in ng/L)`)^2
   }
-  if (!is.null(parameters$`ST2 (ng/mL)`)) {
+  if (!is.na(parameters$`ST2 (ng/mL)`)) {
     new_parameters$`ST2_div_10` <- parameters$`ST2 (ng/mL)` / 10
     new_parameters$`Squared ST2_div_10` <- (new_parameters$`ST2_div_10`)^2
   }
@@ -255,6 +258,7 @@ calc_barcelona_hf_score <- function(parameters) {
   
   return(all_scores)
 }
+# 
 # parameters2 <- list(
 #   `Age (years)` = 40,
 #   `Female` = TRUE,
@@ -267,18 +271,16 @@ calc_barcelona_hf_score <- function(parameters) {
 #   `ACEi/ARB` = FALSE,
 #   `Betablocker` = FALSE,
 #   `HF Duration in months` = 1,
-#   `Diabetis Mellitus` = FALSE,
+#   `Diabetes Mellitus` = FALSE,
 #   `Hospitalisation Prev. Year` = 0,
 #   `MRA` = FALSE,
 #   `ICD` = FALSE,
 #   `CRT` = FALSE,
 #   `ARNI` = FALSE,
-#   `NT-proBNP in pg/mL` = 100,
+#   `NT-proBNP in pg/mL` = NA,
 #   `hs-cTnT in ng/L` = 1.112,
 #   `ST2 (ng/mL)` = 4,
 #   `SGLT2i` = FALSE
 # )
 # 
 # example_scores <- calc_barcelona_hf_score(parameters2)
-# print(example_scores)
-# 

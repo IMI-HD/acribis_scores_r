@@ -305,7 +305,7 @@ server <- function(input, output) {
   
   observeEvent(input$calculate_barcelona, {
     # Parameters for calc_barcelona_hf_score function
-    parameters <- list(
+    barcelona_parameters <- list(
       `Age (years)` = as.numeric(input$barcelona_age),
       Female = input$female,
       `NYHA Class` = as.numeric(input$barcelona_nyha),
@@ -332,14 +332,15 @@ server <- function(input, output) {
     
     # Calculate score
     score <- tryCatch({
-      calc_barcelona_hf_score(parameters)
+      calc_barcelona_hf_score(barcelona_parameters)
     }, error = function(e) {
       paste("Error:", e$message)
     })
-    
-    # Output score
+      # Output score
     output$score_output_barcelona <- renderText({
-      paste("The calculated Barcelona HF scores are:", paste(unlist(score), collapse = ", "))
+      paste("The calculated Barcelona HF scores are:\n",
+            names(score$without_biomarkers$death), ":", score$without_biomarkers$death, "\n",
+            names(score$with_biomarkers$death), ":", score$with_biomarkers$death)
     })
   })
   # Add this to the server function for handling ABC-AF Bleeding Score calculations
