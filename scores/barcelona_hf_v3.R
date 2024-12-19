@@ -3,9 +3,6 @@ library(purrr)
 library(tibble)
 library(readr)
 
-setwd("C:/imi-gitlab/acribis/acribis_scores_r/scores")
-
-
 Model <- list(
   MODEL_1 = "MODEL_1",
   MODEL_2 = "MODEL_2",

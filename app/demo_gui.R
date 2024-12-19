@@ -14,6 +14,9 @@ source("../scores/charge_af.R")
 source("../scores/chads_vasc.R")
 source("../scores/smart.R")
 
+source("../helper/helper.R")
+
+
 # Define the UI
 ui <- fluidPage(
   titlePanel("Cardiovascular Disease Risk Score Calculator"),
@@ -100,7 +103,7 @@ ui <- fluidPage(
                
                mainPanel(
                  h3("Barcelona HF Score:"),
-                 textOutput("score_output_barcelona")
+                 htmlOutput("score_output_barcelona")
                )
              )
     ),
@@ -332,15 +335,14 @@ server <- function(input, output) {
     
     # Calculate score
     score <- tryCatch({
-      calc_barcelona_hf_score(barcelona_parameters)
+      format_barcelona_scores(calc_barcelona_hf_score(barcelona_parameters))
     }, error = function(e) {
       paste("Error:", e$message)
     })
       # Output score
-    output$score_output_barcelona <- renderText({
-      paste("The calculated Barcelona HF scores are:\n",
-            names(score$without_biomarkers$death), ":", score$without_biomarkers$death, "\n",
-            names(score$with_biomarkers$death), ":", score$with_biomarkers$death)
+    output$score_output_barcelona <- renderUI({
+      formatted_score <- paste("The calculated Barcelona HF scores are:", score, sep = "\n")
+      HTML(gsub("\n", "<br>", formatted_score)) # Replace `\n` with `<br>` for HTML rendering
     })
   })
   # Add this to the server function for handling ABC-AF Bleeding Score calculations
