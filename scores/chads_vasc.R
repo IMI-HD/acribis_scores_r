@@ -52,7 +52,7 @@ calc_chads_vasc_scores_from_df <- function(patients_df) {
       NA
     })
   }
-  # Return a tuple-like list with PatientIDs and their corresponding Scores
+  # Return a data frame with PatientIDs and their corresponding Scores
   return(data.frame(patient_ids, scores, stringsAsFactors = FALSE, check.names = FALSE))
 }
 # 

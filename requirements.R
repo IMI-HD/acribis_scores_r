@@ -7,4 +7,3 @@ install_if_missing <- function(pack) {
 }
 
 invisible(sapply(packages, install_if_missing))
-
