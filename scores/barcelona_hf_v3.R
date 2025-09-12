@@ -18,9 +18,9 @@ MIN_MAX_MEDIAN <- tibble(
   variable = c("Age (years)", "Ejection fraction (%)", "Sodium (mmol/L)", "eGFR in mL/min/1.73m²",
                "Hemoglobin (g/dL)", "NT-proBNP in pg/mL", "hs-cTnT in ng/L", "ST2 (ng/mL)",
                "HF Duration in months", "Hospitalisation Prev. Year"),
-  lower_limit = c(35, 11, 130, 6.4, 8.8, 21.5017, 3, 18.089, 0.5, 0),
-  upper_limit = c(88, 71, 147, 109.7, 17.1, 34800.59, 265.45, 157.074, 246.948, 8),
-  median_impute = c(70.3, 34, 139, 51.2, 12.9, 1361.5, 22.6, 38.1, 27, 0)
+  lower_limit = c(31.31446954141, 13, 128, 7.63881506570324, 8.9, 37.45, 4.8245, 6.29, 0, 0),
+  upper_limit = c(90.9212046543464, 78.71, 145, 119.283356873844, 16.771, 34800, 242.84, 171.1, 257.040000000001, 5.71000000000004),
+  median_impute = c(70.3, 35, 138, 60.613452863849, 12.9, 1361.5, 22.6, 38.1, 6, 0)
 )
 
 check_values <- function(parameter_value, parameter_name, min_max_median) {
@@ -100,9 +100,10 @@ get_new_parameters <- function(parameters) {
   new_parameters$`NYHA Class` <- ifelse(parameters$`NYHA Class` %in% c(1, 2), 0, 1)
   new_parameters$`Ejection fraction (%)` <- ifelse(parameters$`Ejection fraction (%)` <= 45, 0, 1)
   new_parameters$`log(HF Duration in months)` <- log(parameters$`HF Duration in months`)
-  new_parameters$`Furosemide Dose 1` <- ifelse(parameters$`Loop Diuretic Furosemide Dose` > 0 & parameters$`Loop Diuretic Furosemide Dose` <= 40, 1, 0)
-  new_parameters$`Furosemide Dose 2` <- ifelse(parameters$`Loop Diuretic Furosemide Dose` > 40 & parameters$`Loop Diuretic Furosemide Dose` <= 80, 1, 0)
-  new_parameters$`Furosemide Dose 3` <- ifelse(parameters$`Loop Diuretic Furosemide Dose` > 80, 1, 0)
+  loop_diuretic_dose = parameters$`Loop Diuretic Furosemide Dose` + 4 * parameters$`Loop Diuretic Torasemide Dose`
+  new_parameters$`Furosemide Dose 1` <- ifelse(loop_diuretic_dose > 0 & loop_diuretic_dose <= 40, 1, 0)
+  new_parameters$`Furosemide Dose 2` <- ifelse(loop_diuretic_dose > 40 & loop_diuretic_dose <= 80, 1, 0)
+  new_parameters$`Furosemide Dose 3` <- ifelse(loop_diuretic_dose > 80, 1, 0)
   if (!is.na(parameters$`NT-proBNP in pg/mL`)) {
     new_parameters$`log(NT-proBNP in pg/mL)` <- ifelse(parameters$`NT-proBNP in pg/mL` == 0, 0, log(parameters$`NT-proBNP in pg/mL`))
   }
@@ -264,6 +265,7 @@ calc_barcelona_hf_score <- function(parameters) {
 #   `eGFR in mL/min/1.73m²` = 6,
 #   `Hemoglobin (g/dL)` = 12,
 #   `Loop Diuretic Furosemide Dose` = 20,
+#   `Loop Diuretic Torasemide Dose` = 0,
 #   `Statin` = TRUE,
 #   `ACEi/ARB` = FALSE,
 #   `Betablocker` = FALSE,
