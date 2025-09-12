@@ -1,5 +1,20 @@
 library(dplyr)
 
+param_names <- c(
+  "Prior Stroke/TIA",
+  "Age",
+  "Troponin T in ng/L",
+  "NT-proBNP in ng/L",
+  "DOAC",
+  "Aspirin"
+)
+
+bool_params <- c(
+  "Prior Stroke/TIA",
+  "DOAC",
+  "Aspirin"
+)
+
 abc_af_stroke_check_ranges <- function(parameters) {
   if (parameters$`Age` < 22 || parameters$`Age` > 95) {
     stop("'Age' must be between 22 and 95")
@@ -44,7 +59,7 @@ calc_abc_af_stroke_score <- function(parameters) {
   one_year_risk <- (1 - (baseline_survival ^ exp(linear_predictor)))
   return (one_year_risk * 100)
 }
-# 
+
 # parameters <- list(
 #   `Prior Stroke/TIA` = TRUE,
 #   `Age` = 70,
@@ -55,3 +70,55 @@ calc_abc_af_stroke_score <- function(parameters) {
 # )
 # 
 # calc_abc_af_stroke_score(parameters)
+
+# Function to process a data frame and calculate the ABC‐AF Stroke Score.
+calc_abc_af_stroke_score_from_df <- function(patients_df) {
+  # Set new column names: first column "PatientID", then the expected parameters.
+  colnames(patients_df) <- c("PatientID", param_names)
+  
+  # Extract Patient IDs.
+  patient_ids <- patients_df$PatientID
+  
+  # Preallocate a numeric vector to store stroke scores.
+  scores <- numeric(nrow(patients_df))
+  
+  # Loop through each row.
+  for (i in seq_len(nrow(patients_df))) {
+    # Convert the current row (excluding PatientID) to a named list.
+    patient_params <- as.list(patients_df[i, param_names])
+    
+    # Convert specified boolean fields to logical.
+    for (field in bool_params) {
+      patient_params[[field]] <- as.logical(as.integer(patient_params[[field]]))
+    }
+    
+    # Calculate the stroke score using calc_abc_af_stroke_score (from abc_af_stroke.R).
+    score <- tryCatch({
+      calc_abc_af_stroke_score(patient_params)
+    }, error = function(e) {
+      cat("Error for Patient", patient_ids[i], ":", e$message, "\n")
+      NA
+    })
+    
+    scores[i] <- score
+  }
+  
+  # Return a data frame with PatientIDs and their corresponding Stroke Scores.
+  return(data.frame(PatientID = patient_ids, Score = scores,
+                    stringsAsFactors = FALSE, check.names = FALSE))
+}
+
+# example_abc_stroke_df <- data.frame(
+#   PatientID = c("P1", "P2", "P3"),
+#   `Prior Stroke/TIA` = c(1, 0, 1),
+#   Age = c(70, 65, 75),
+#   `Troponin T in ng/L` = c(15.0, 12.0, 18.0),
+#   `NT-proBNP in ng/L` = c(1000, 950, 1100),
+#   DOAC = c(1, 1, 0),
+#   Aspirin = c(0, 0, 1),
+#   stringsAsFactors = FALSE
+# )
+# 
+# # Test the ABC‐AF Stroke Score function.
+# result_abc_stroke <- calc_abc_af_stroke_score_from_df(example_abc_stroke_df)
+# print(result_abc_stroke)

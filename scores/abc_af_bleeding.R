@@ -1,5 +1,20 @@
-# Load necessary libraries
 library(dplyr)
+
+param_names <- c(
+  "Prior Bleeding",
+  "Age",
+  "Troponin T in ng/L",
+  "GDF-15 in ng/L",
+  "Hemoglobin in g/dL",
+  "DOAC",
+  "Aspirin"
+)
+
+bool_params <- c(
+  "Prior Bleeding",
+  "DOAC",
+  "Aspirin"
+)
 
 # Define parameters validation function
 abc_af_bleeding_check_ranges <- function(parameters) {
@@ -64,4 +79,57 @@ calc_abc_af_bleeding_score <- function(parameters) {
 # )
 # 
 # calc_abc_af_bleeding_score(parameters)
+
+# Function to process a data frame and calculate the ABC‐AF Bleeding Score.
+calc_abc_af_bleeding_score_from_df <- function(patients_df) {
+  # Set new column names: the first column must be "PatientID", then the expected parameters.
+  colnames(patients_df) <- c("PatientID", param_names)
+  
+  # Extract Patient IDs.
+  patient_ids <- patients_df$PatientID
+  
+  # Preallocate a numeric vector to store the scores.
+  scores <- numeric(nrow(patients_df))
+  
+  # Loop through each row.
+  for (i in seq_len(nrow(patients_df))) {
+    # Convert the row (excluding PatientID) into a named list.
+    patient_params <- as.list(patients_df[i, param_names])
+    
+    # Convert specified boolean fields (if provided as 0/1) to logical values.
+    for (field in bool_params) {
+      patient_params[[field]] <- as.logical(as.integer(patient_params[[field]]))
+    }
+    
+    # Calculate the score using calc_abc_af_bleeding_score (from abc_af_bleeding.R).
+    score <- tryCatch({
+      calc_abc_af_bleeding_score(patient_params)
+    }, error = function(e) {
+      cat("Error for Patient", patient_ids[i], ":", e$message, "\n")
+      NA
+    })
+    
+    scores[i] <- score
+  }
+  
+  # Return a data frame with PatientIDs and their corresponding Bleeding Scores.
+  return(data.frame(PatientID = patient_ids, Score = scores,
+                    stringsAsFactors = FALSE, check.names = FALSE))
+}
+
+# example_abc_bleeding_df <- data.frame(
+#   PatientID = c("P1", "´P2", "P3"),
+#   `Prior Bleeding` = c(1, 0, 1),
+#   Age = c(65, 70, 55),
+#   `Troponin T in ng/L` = c(10.0, 15.0, 12.0),
+#   `GDF-15 in ng/L` = c(500.0, 800.0, 600.0),
+#   `Hemoglobin in g/dL` = c(13.5, 12.0, 14.0),
+#   DOAC = c(1, 1, 0),
+#   Aspirin = c(0, 0, 0),
+#   stringsAsFactors = FALSE
+# )
 # 
+# # Test the ABC‐AF Bleeding Score function.
+# result_abc_bleeding <- calc_abc_af_bleeding_score_from_df(example_abc_bleeding_df)
+# print(result_abc_bleeding)
+

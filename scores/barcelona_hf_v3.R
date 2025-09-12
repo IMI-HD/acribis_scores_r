@@ -3,6 +3,47 @@ library(purrr)
 library(tibble)
 library(readr)
 
+# Global parameter names (excluding PatientID) expected by calc_barcelona_hf_score()
+param_names <- c(
+  "Age (years)",
+  "Female",
+  "NYHA Class",
+  "Sodium (mmol/L)",
+  "eGFR in mL/min/1.73m²",
+  "Hemoglobin (g/dL)",
+  "Loop Diuretic Furosemide Dose",
+  "Statin",
+  "ACEi/ARB",
+  "Betablocker",
+  "HF Duration in months",
+  "Diabetes Mellitus",
+  "Hospitalisation Prev. Year",
+  "MRA",
+  "ICD",
+  "CRT",
+  "ARNI",
+  "NT-proBNP in pg/mL",
+  "hs-cTnT in ng/L",
+  "ST2 (ng/mL)",
+  "SGLT2i",
+  "Ejection fraction (%)"
+)
+
+# Global vector for parameters to treat as booleans (convert 0/1 to logical)
+bool_params <- c(
+  "Female",
+  "Statin",
+  "ACEi/ARB",
+  "Betablocker",
+  "Diabetes Mellitus",
+  "Hospitalisation Prev. Year",
+  "MRA",
+  "ICD",
+  "CRT",
+  "ARNI",
+  "SGLT2i"
+)
+
 Model <- list(
   MODEL_1 = "MODEL_1",
   MODEL_2 = "MODEL_2",
@@ -256,7 +297,7 @@ calc_barcelona_hf_score <- function(parameters) {
   
   return(all_scores)
 }
-# 
+
 # parameters2 <- list(
 #   `Age (years)` = 40,
 #   `Female` = TRUE,
@@ -283,3 +324,117 @@ calc_barcelona_hf_score <- function(parameters) {
 # )
 # 
 # example_scores <- calc_barcelona_hf_score(parameters2)
+
+flatten_barcelona_scores <- function(result_barcelona) {
+  # Create an empty list to collect rows.
+  all_rows <- list()
+  
+  # Loop over each patient
+  for (i in seq_along(result_barcelona$PatientIDs)) {
+    pid <- result_barcelona$PatientIDs[i]
+    score_entry <- result_barcelona$Scores[[i]]
+    
+    # Loop over each biomarker type if present ("without_biomarkers", "with_biomarkers")
+    for (bio in names(score_entry)) {
+      outcomes <- score_entry[[bio]]
+      # For each outcome within the biomarker category:
+      for (outcome in names(outcomes)) {
+        value <- outcomes[[outcome]]
+        if (outcome == "life_expectancy") {
+          # Single value outcome
+          all_rows[[length(all_rows) + 1]] <- data.frame(
+            PatientID = pid,
+            Biomarker = bio,
+            Outcome = outcome,
+            Year = NA,
+            Score = value,
+            stringsAsFactors = FALSE
+          )
+        } else {
+          # Assume vector (e.g., death, hosp, hosp_death): add one row per year (1:5)
+          for (year in seq_along(value)) {
+            all_rows[[length(all_rows) + 1]] <- data.frame(
+              PatientID = pid,
+              Biomarker = bio,
+              Outcome = outcome,
+              Year = year,
+              Score = value[year],
+              stringsAsFactors = FALSE
+            )
+          }
+        }
+      }
+    }
+  }
+  
+  # Bind all rows into one data frame
+  tidy_df <- do.call(rbind, all_rows)
+  return(tidy_df)
+}
+
+calc_barcelona_score_from_df <- function(patients_df) {
+  # Set new column names: first column must be "PatientID", then the parameters in the expected order.
+  colnames(patients_df) <- c("PatientID", param_names)
+  
+  # Extract Patient IDs (assumes a column called "PatientID")
+  patient_ids <- patients_df$PatientID
+  
+  # Preallocate a list to store the score outputs for each patient
+  scores <- vector("list", nrow(patients_df))
+  
+  # Loop through each row and compute the score
+  for (i in seq_len(nrow(patients_df))) {
+    cat("Processing Patient", patient_ids[i], "...\n")
+    
+    # Convert the row (excluding PatientID) to a named list of parameters.
+    patient_params <- as.list(patients_df[i, param_names])
+    
+    # Convert the specified boolean parameters from numeric (0/1) to logical values.
+    for (field in bool_params) {
+      patient_params[[field]] <- as.logical(as.integer(patient_params[[field]]))
+    }
+    
+    # Calculate the Barcelona HF score endpoints for this patient.
+    # The call is wrapped in a tryCatch block to capture and report errors.
+    scores[[i]] <- tryCatch({
+      calc_barcelona_hf_score(patient_params)
+    }, error = function(e) {
+      cat("Error for Patient", patient_ids[i], ":", e$message, "\n")
+      NA
+    })
+  }
+  
+  # Return a "tuple" as a list with PatientIDs and the list of score outputs.
+  return(list(PatientIDs = patient_ids, Scores = scores))
+}
+
+# example_barcelona_df <- data.frame(
+#   PatientID = c("P1", "P2", "P3"),
+#   `Age (years)` = c(60, 70, 55),
+#   Female = c(1, 0, 1),
+#   `NYHA Class` = c(2, 3, 2),
+#   `Sodium (mmol/L)` = c(138, 140, 135),
+#   `eGFR in mL/min/1.73m²` = c(60, 80, 55),
+#   `Hemoglobin (g/dL)` = c(12, 14, 11),
+#   `Loop Diuretic Furosemide Dose` = c(20, 0, 40),
+#   Statin = c(1, 0, 1),
+#   `ACEi/ARB` = c(0, 1, 0),
+#   Betablocker = c(0, 1, 0),
+#   `HF Duration in months` = c(1, 12, 6),
+#   `Diabetes Mellitus` = c(0, 1, 0),
+#   `Hospitalisation Prev. Year` = c(0, 1, 0),
+#   MRA = c(0, 0, 1),
+#   ICD = c(0, 0, 0),
+#   CRT = c(0, 0, 1),
+#   ARNI = c(0, 1, 0),
+#   `NT-proBNP in pg/mL` = c(NA, 200, 500),
+#   `hs-cTnT in ng/L` = c(1.112, 0.8, 1.5),
+#   `ST2 (ng/mL)` = c(4, 3, 5),
+#   SGLT2i = c(0, 1, 0),
+#   `Ejection fraction (%)` = c(40, 50, 30),
+#   stringsAsFactors = FALSE
+# )
+# 
+# tidy_barcelona <- flatten_barcelona_scores(result_barcelona)
+# print(tidy_barcelona)
+
