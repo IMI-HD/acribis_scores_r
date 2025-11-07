@@ -37,12 +37,19 @@ bool_params <- c(
   "ACEi/ARB",
   "Betablocker",
   "Diabetes Mellitus",
-  "Hospitalisation Prev. Year",
   "MRA",
   "ICD",
   "CRT",
   "ARNI",
   "SGLT2i"
+)
+
+imputable_params <- c(
+  "Ejection fraction (%)",
+  "Sodium (mmol/L)",
+  "eGFR in mL/min/1.73m²",
+  "Hemoglobin (g/dL)",
+  "HF Duration in months"
 )
 
 Model <- list(
@@ -72,7 +79,7 @@ check_values <- function(parameter_value, parameter_name, min_max_median) {
   median_impute <- row$median_impute
   
   if (is.na(parameter_value)) {
-    parameter_value <- ifelse(!is.na(median_impute), median_impute, NA)
+    parameter_value <- ifelse(parameter_name %in% imputable_params, median_impute, NA)
   } else if (parameter_value < lower_limit) {
     parameter_value <- lower_limit
   } else if (parameter_value > upper_limit) {
@@ -251,6 +258,11 @@ round_life_expectancy <- function(model, parameters) {
 }
 
 calc_barcelona_hf_score <- function(parameters) {
+  # Convert the specified boolean parameters from numeric (0/1) to logical values.
+  for (field in bool_params) {
+    parameters[[field]] <- as.logical(as.integer(parameters[[field]]))
+  }
+
   all_scores <- list()
   coefficients_death_file <- '../resources/barcelona_hf_v3_death_coefficients.csv'
   coefficients_hosp_file <- '../resources/barcelona_hf_v3_hosp_coefficients.csv'
@@ -314,6 +326,7 @@ calc_barcelona_hf_score <- function(parameters) {
 #   `HF Duration in months` = 1,
 #   `Diabetes Mellitus` = FALSE,
 #   `Hospitalisation Prev. Year` = 0,
+#   `Ejection fraction (%)` = 40,
 #   `MRA` = FALSE,
 #   `ICD` = FALSE,
 #   `CRT` = FALSE,
@@ -389,11 +402,6 @@ calc_barcelona_score_from_df <- function(patients_df) {
     
     # Convert the row (excluding PatientID) to a named list of parameters.
     patient_params <- as.list(patients_df[i, param_names])
-    
-    # Convert the specified boolean parameters from numeric (0/1) to logical values.
-    for (field in bool_params) {
-      patient_params[[field]] <- as.logical(as.integer(patient_params[[field]]))
-    }
     
     # Calculate the Barcelona HF score endpoints for this patient.
     # The call is wrapped in a tryCatch block to capture and report errors.
